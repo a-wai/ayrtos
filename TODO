@@ -1,0 +1,22 @@
+Things to be done to get a v0.1 up and working :
+
+1. USART
+
+	* Use interrupt-driven serial communications
+
+2. Multitasking
+
+	* Allow use of interrupts, and allow tasks to sleep while waiting for an interrupt
+
+3. Keyboard
+
+	* Implement PS/2 protocol using USART
+	
+4. File System
+
+	* Write EEPROM drivers
+	* Design & implement simple file system
+
+5. Interactive shell
+
+	* Write simple interactive shell to be used through the serial connection
