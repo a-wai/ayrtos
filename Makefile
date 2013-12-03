@@ -1,20 +1,4 @@
-SHELL       = sh
-UNAME       = $(shell uname)
-MACHINE     = $(shell uname -m)
-
-# Define correct TTY according to OS
-ifeq ($(UNAME), Linux)
-    ifeq ($(MACHINE), armv7l)
-        TTY     = /dev/usb/tty1-1.1
-        DUDECFG = -C /data/data/jackpal.androidterm/local/etc/avrdude.conf
-        DROIDSU = /system/xbin/su -c
-    else
-        TTY = /dev/ttyACM0
-    endif
-else ifeq ($(UNAME),Darwin)
-    TTY     = /dev/tty.usbmodem1d1771
-endif
-
+TTY = /dev/ttyACM0
 MCU         = atmega328p
 TARGET_ARCH = -mmcu=$(MCU)
 TARGET      = kernel
@@ -23,7 +7,7 @@ CPPFLAGS    = -mmcu=$(MCU) -I. -I.. -DATMEGA328P -DF_CPU=16000000
 CFLAGS      = -Wall -Os
 LDFLAGS     = -mmcu=$(MCU) -lm -Wl,--gc-sections -Os
 PGMER       = -c arduino -b 115200 -P $(TTY)
-DUDE        = avrdude -V -p $(MCU) $(DUDECFG)
+DUDE        = avrdude -V -p $(MCU) 
 C_SRCS      = $(wildcard *.c)
 OBJ_FILES   = \
 	kernel/kernel.o \
@@ -62,7 +46,7 @@ $(TARGET).hex: $(TARGET).elf
 	avr-objcopy -j .text -j .data -O ihex $(TARGET).elf $(TARGET).hex
 
 upload: $(TARGET).hex
-	$(DROIDSU) $(DUDE) $(PGMER) -U flash:w:$(TARGET).hex
+	$(DUDE) $(PGMER) -U flash:w:$(TARGET).hex
 	
 size: $(TARGET).elf
 	avr-size --format=avr --mcu=$(MCU) $(TARGET).elf
